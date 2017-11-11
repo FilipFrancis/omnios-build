@@ -29,14 +29,14 @@
 . ../../lib/functions.sh
 
 PROG=openssl
-VER=1.1.0f
-LVER=1.0.2l
+VER=1.1.0g
+LVER=1.0.2m
 VERHUMAN=$VER
 PKG=library/security/openssl
 SUMMARY="$PROG - A toolkit for Secure Sockets Layer and Transport Layer protocols and general purpose cryptographic library"
 DESC="$SUMMARY"
 
-DEPENDS_IPS="SUNWcs system/library system/library/gcc-5-runtime library/zlib"
+DEPENDS_IPS="SUNWcs system/library system/library/gcc-runtime library/zlib"
 BUILD_DEPENDS_IPS="$DEPENDS_IPS developer/sunstudio12.1"
 
 # Generic configure optons for both 32 and 64bit variants
@@ -154,7 +154,7 @@ merge_package() {
 	version_files $DESTDIR `echo $VER | cut -d. -f1-2`
 	version_files $LDESTDIR `echo $LVER | cut -d. -f1-2`
 
-	( cd $LDESTDIR; find . | cpio -pvmud $DESTDIR )
+	( cd $LDESTDIR; find . | cpio -pmud $DESTDIR )
 }
 
 ######################################################################

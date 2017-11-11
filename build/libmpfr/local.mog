@@ -1,0 +1,6 @@
+
+<transform file dir path=usr/share -> drop>
+
+license COPYING license=GPLv3
+license COPYING.LESSER license=LGPLv3
+

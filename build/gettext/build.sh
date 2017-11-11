@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 #
-# CDDL HEADER START
+# {{{ CDDL HEADER START
 #
 # The contents of this file are subject to the terms of the
 # Common Development and Distribution License, Version 1.0 only
@@ -18,25 +18,25 @@
 # fields enclosed by brackets "[]" replaced with your own identifying
 # information: Portions Copyright [yyyy] [name of copyright owner]
 #
-# CDDL HEADER END
-#
+# CDDL HEADER END }}}
 #
 # Copyright 2016 OmniTI Computer Consulting, Inc.  All rights reserved.
+# Copyright 2017 OmniOS Community Edition (OmniOSce) Association.
 # Use is subject to license terms.
 #
 # Load support functions
 . ../../lib/functions.sh
 
-PROG=gettext                  # App name
-VER=0.19.8.1                  # App version
-PKG=text/gnu-gettext          # Package name (without prefix)
+PROG=gettext
+VER=0.19.8.1
+PKG=text/gnu-gettext
 SUMMARY="gettext - GNU gettext utility"
-DESC="GNU gettext - GNU gettext utility ($VER)"
+DESC="GNU gettext - GNU gettext utility"
 
 NO_PARALLEL_MAKE=1
 BUILDARCH=32
 
-DEPENDS_IPS="developer/macro/gnu-m4"
+DEPENDS_IPS="system/prerequisite/gnu developer/macro/gnu-m4"
 
 CONFIGURE_OPTS="--infodir=$PREFIX/share/info
 	--disable-java
@@ -47,42 +47,18 @@ CONFIGURE_OPTS="--infodir=$PREFIX/share/info
 	--disable-shared
 	--bindir=/usr/bin"
 
-install_license() {
-    local LICENSE_FILE
-    LICENSE_FILE=$TMPDIR/$BUILDDIR/$1
-
-    if [ -f "$LICENSE_FILE" ]; then
-        logmsg "Using $LICENSE_FILE as package license"
-        logcmd cp $LICENSE_FILE $DESTDIR/license
-    else
-        logerr "-- $LICENSE_FILE not found!"
-        exit 255
-    fi
-}
-
-make_links() {
-    logmsg "Creating GNU symlinks"
-    logcmd mkdir -p $DESTDIR/$PREFIX/gnu/bin
-    logcmd mkdir -p $DESTDIR/$PREFIX/gnu/share/man/man1
-    for file in gettext msgfmt xgettext
-    do
-        logcmd mv $DESTDIR/$PREFIX/bin/$file $DESTDIR/$PREFIX/bin/g$file
-        logcmd mv $DESTDIR/$PREFIX/share/man/man1/$file.1 $DESTDIR/$PREFIX/share/man/man1/g$file.1
-        logcmd ln -s ../../bin/g$file $DESTDIR/$PREFIX/gnu/bin/$file
-        logcmd ln -s ../../../../share/man/man1/g$file.1 $DESTDIR/$PREFIX/gnu/share/man/man1/$file
-    done
-}
+TESTSUITE_FILTER='^[A-Z#][A-Z ]'
+[ -n "$BATCH" ] && SKIP_TESTSUITE=1
 
 init
 download_source $PROG $PROG $VER
 patch_source
 prep_build
 build
-install_license COPYING
+run_testsuite check
 make_isa_stub
-make_links
 make_package
 clean_up
 
 # Vim hints
-# vim:ts=4:sw=4:et:
+# vim:ts=4:sw=4:et:fdm=marker

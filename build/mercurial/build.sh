@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 #
-# CDDL HEADER START
+# {{{ CDDL HEADER START
 #
 # The contents of this file are subject to the terms of the
 # Common Development and Distribution License, Version 1.0 only
@@ -18,7 +18,7 @@
 # fields enclosed by brackets "[]" replaced with your own identifying
 # information: Portions Copyright [yyyy] [name of copyright owner]
 #
-# CDDL HEADER END
+# CDDL HEADER END }}}
 #
 #
 # Copyright 2017 OmniTI Computer Consulting, Inc.  All rights reserved.
@@ -28,15 +28,12 @@
 . ../../lib/functions.sh
 
 PROG=mercurial
-VER=4.3.1
+VER=4.4.1
 PKG=developer/versioning/mercurial
 SUMMARY="$PROG - a free and open source, distributed version control system"
 DESC="$SUMMARY"
 
 DEPENDS_IPS="web/curl library/security/openssl"
-
-# For inet_ntop which isn't detected properly in the configure script
-CONFIGURE_OPTS=""
 
 PYTHONPATH=/usr
 PYTHON=$PYTHONPATH/bin/python2.7
@@ -77,3 +74,6 @@ prep_build
 python_build
 make_package
 clean_up
+
+# Vim hints
+# vim:ts=4:sw=4:et:fdm=marker

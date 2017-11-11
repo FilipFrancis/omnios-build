@@ -30,7 +30,7 @@
 
 PKG=library/python-2/pylint-27
 PROG=pylint
-VER=1.7.2
+VER=1.7.4
 SUMMARY="python code static checker"
 DESC="$SUMMARY"
 
@@ -41,5 +41,5 @@ download_source $PROG $PROG $VER
 patch_source
 prep_build
 python_build
-make_package
+make_package local.mog ../final.mog
 clean_up

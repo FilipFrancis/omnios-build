@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 #
-# CDDL HEADER START
+# {{{ CDDL HEADER START
 #
 # The contents of this file are subject to the terms of the
 # Common Development and Distribution License, Version 1.0 only
@@ -18,69 +18,51 @@
 # fields enclosed by brackets "[]" replaced with your own identifying
 # information: Portions Copyright [yyyy] [name of copyright owner]
 #
-# CDDL HEADER END
-#
+# CDDL HEADER END }}}
 #
 # Copyright 2011-2012 OmniTI Computer Consulting, Inc.  All rights reserved.
+# Copyright 2017 OmniOS Community Edition (OmniOSce) Association.
 # Use is subject to license terms.
 #
 # Load support functions
 . ../../lib/functions.sh
 
 PROG=glib
-VER=2.34.3
+VER=2.54.2
 PKG=library/glib2
 SUMMARY="$PROG - GNOME GLib utility library"
 DESC="$SUMMARY"
 
-DEPENDS_IPS="SUNWcs library/libffi@$FFIVERS library/zlib system/library
-	system/library/gcc-5-runtime runtime/perl"
+DEPENDS_IPS="
+    runtime/python-27
+    runtime/perl
+"
 
-# Use old gcc4 standards level for this.
-export CFLAGS="$CFLAGS -std=gnu89"
+CFLAGS+=" -D_XPG6"
+LDFLAGS+=" -Wl,-z,ignore"
 
-CONFIGURE_OPTS="--disable-fam --disable-dtrace --with-threads=posix"
+CONFIGURE_OPTS="
+    --disable-fam
+    --disable-dtrace
+    --with-threads=posix
+"
 
-save_function configure32 configure32_orig
-save_function configure64 configure64_orig
-configure32() {
-    LIBFFI_CFLAGS=-I/usr/lib/libffi-$FFIVERS/include
-    export LIBFFI_CFLAGS
-    LIBFFI_LIBS=-lffi
-    export LIBFFI_LIBS
-    configure32_orig
+TESTSUITE_FILTER='^[A-Z#][A-Z ]'
 
-    logcmd perl -pi -e 's#(\$CC.*\$compiler_flags)#$1 -nostdlib -lc#g;' libtool ||
-        logerr "libtool patch failed"
-    # one file here requires c99 compilation and most others prohibit it
-    # it is a test, so no runtime issues will be present
-    pushd glib/tests > /dev/null
-    logmsg " one off strfuncs.o c99 compile"
-    logcmd make CFLAGS="-std=c99" strfuncs.o
-    popd > /dev/null
-}
-configure64() {
-    LIBFFI_CFLAGS=-I/usr/lib/amd64/libffi-$FFIVERS/include
-    export LIBFFI_CFLAGS
-    LIBFFI_LIBS=-lffi
-    export LIBFFI_LIBS
-    configure64_orig
-
-    logcmd perl -pi -e 's#(\$CC.*\$compiler_flags)#$1 -nostdlib -lc#g;' libtool ||
-        logerr "libtool patch failed"
-    # one file here requires c99 compilation and most others prohibit it
-    # it is a test, so no runtime issues will be present
-    pushd glib/tests > /dev/null
-    logmsg " one off strfuncs.o c99 compile"
-    logcmd make CFLAGS="-m64 -std=c99" strfuncs.o
-    popd > /dev/null
-}
+# With gcc 6, -Werror_format=2 produces errors like:
+#   error: format not a string literal, arguments not checked
+# Tell configure that this flag doesn't exist for the compiler.
+export cc_cv_CFLAGS__Werror_format_2=no
 
 init
 download_source $PROG $PROG $VER
 patch_source
 prep_build
 build
+run_testsuite check
 make_isa_stub
 make_package
 clean_up
+
+# Vim hints
+# vim:ts=4:sw=4:et:fdm=marker

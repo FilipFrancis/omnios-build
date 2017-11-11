@@ -28,13 +28,13 @@
 . ../../lib/functions.sh
 
 PROG=cdrtools
-VER=3.00
+VER=3.01
 VERHUMAN=$VER
 PKG=media/cdrtools
 SUMMARY="CD creation utilities"
 DESC="$SUMMARY ($VER)"
 
-DEPENDS_IPS="system/library system/library/gcc-5-runtime"
+DEPENDS_IPS="system/library system/library/gcc-runtime"
 
 MAKE="make"
 BUILDARCH=32

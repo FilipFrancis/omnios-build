@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 #
-# CDDL HEADER START
+# {{{ CDDL HEADER START
 #
 # The contents of this file are subject to the terms of the
 # Common Development and Distribution License, Version 1.0 only
@@ -18,57 +18,38 @@
 # fields enclosed by brackets "[]" replaced with your own identifying
 # information: Portions Copyright [yyyy] [name of copyright owner]
 #
-# CDDL HEADER END
-#
+# CDDL HEADER END }}}
 #
 # Copyright 2011-2015 OmniTI Computer Consulting, Inc.  All rights reserved.
+# Copyright 2017 OmniOS Community Edition (OmniOSce) Association.
 # Use is subject to license terms.
 #
 # Load support functions
 . ../../lib/functions.sh
 
 PROG=gawk
-VER=4.1.4
+VER=4.2.0
 VERHUMAN=$VER
 PKG=text/gawk
 SUMMARY="gawk - GNU implementation of awk"
 DESC="$SUMMARY"
 
+RUN_DEPENDS_IPS="system/prerequisite/gnu"
+
 BUILDARCH=32
-CONFIGURE_OPTS_32="$CONFIGURE_OPTS_32 --bindir=/usr/bin"
-# Use old gcc4 standards level for this.
-CFLAGS="$CFLAGS -std=gnu89"
+CONFIGURE_OPTS_32+=" --bindir=/usr/bin"
+CPPFLAGS+=" -I/usr/include/gmp"
+CFLAGS+=" -D_XPG6"
 
-# as of 4.1, gawk now supports arbitrary precision numbers.
-# build in MPFR/GMP support rather than dynamically linking it.
-save_function configure32 configure32_orig
-configure32() {
-    configure32_orig
-
-    logmsg "Patching Makefile to make mpfr/gmp static"
-    pushd $TMPDIR/$BUILDDIR > /dev/null
-    logcmd gsed -i -e "s#-lmpfr -lgmp#$GCCPATH/lib/libmpfr.a $GCCPATH/lib/libgmp.a#" Makefile
-    popd > /dev/null
-}
-
-gnu_cleanup() {
-    logmsg "Cleaning up install root"
-    logcmd mkdir -p $DESTDIR/usr/gnu/bin
-    logcmd mkdir -p $DESTDIR/usr/gnu/share/man/man1
-    logcmd ln -s ../../bin/gawk $DESTDIR/usr/gnu/bin/awk
-    logcmd ln -s ../../../../share/man/man1/gawk.1 $DESTDIR/usr/gnu/share/man/man1/awk.1
-    logcmd rm -f $DESTDIR/usr/bin/awk || logerr "--- Unable to clean up $DESTDIR/usr/bin"
-    logcmd rm -rf $DESTDIR/usr/libexec || logerr "--- unable to clean up libexec dir"
-}
 init
 download_source $PROG $PROG $VER
 patch_source
 prep_build
 build
-gnu_cleanup
+run_testsuite check
 make_isa_stub
 make_package
 clean_up
 
 # Vim hints
-# vim:ts=4:sw=4:et:
+# vim:ts=4:sw=4:et:fdm=marker

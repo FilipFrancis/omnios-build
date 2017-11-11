@@ -50,7 +50,7 @@ PATH=/usr/perl5/${PERLVER}/bin:/opt/gcc-${VER}/bin:$PATH
 export PATH
 
 DEPENDS_IPS="developer/gcc44/libgmp-gcc44 developer/gcc44/libmpfr-gcc44 developer/gcc44/libmpc-gcc44
-	     developer/gnu-binutils developer/library/lint developer/linker system/library/gcc-5-runtime"
+	     developer/gnu-binutils developer/library/lint developer/linker system/library/gcc-runtime"
 BUILD_DEPENDS_IPS="$DEPENDS_IPS"
 
 # This stuff is in its own domain
@@ -60,7 +60,6 @@ BUILDARCH=32
 PREFIX=/opt/gcc-${VER}
 reset_configure_opts
 CC=gcc
-TAR=gtar
 
 LD_FOR_TARGET=/bin/ld
 export LD_FOR_TARGET
