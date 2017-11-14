@@ -17,6 +17,7 @@
 | developer/build/libtool		| 2.4.6			| https://www.gnu.org/software/libtool/
 | developer/gcc5			| 5.5			| https://www.gnu.org/software/gcc/releases.html
 | developer/gcc6			| 6.4			| https://www.gnu.org/software/gcc/releases.html
+| developer/gcc7			| 7.2			| https://www.gnu.org/software/gcc/releases.html
 | developer/java/jdk			| 1.7.0_151-b01		| http://hg.openjdk.java.net/jdk7u/jdk7u/tags
 | developer/lexer/flex			| 2.6.4			| https://github.com/westes/flex/releases
 | developer/macro/gnu-m4		| 1.4.18		| http://git.savannah.gnu.org/cgit/m4.git/refs/tags
@@ -64,7 +65,7 @@
 | shell/pipe-viewer			| 1.6.6			| http://www.ivarch.com/programs/pv.shtml
 | shell/tcsh				| 6.20.00		| https://github.com/tcsh-org/tcsh/releases
 | shell/zsh				| 5.4.2			| https://sourceforge.net/projects/zsh/files/zsh
-| system/library/dbus			| 1.12.0		| https://dbus.freedesktop.org/releases/dbus
+| system/library/dbus			| 1.12.2		| https://dbus.freedesktop.org/releases/dbus
 | system/library/libdbus-glib		| 0.108			| https://dbus.freedesktop.org/releases/dbus-glib/
 | system/library/pcap			| 1.8.1			| http://www.tcpdump.org/#latest-releases
 | system/management/ipmitool		| 1.8.18		| https://sourceforge.net/projects/ipmitool/files/ipmitool
